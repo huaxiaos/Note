@@ -59,6 +59,22 @@ bottomSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgrou
 BottomSheetDialog dialog = new BottomSheetDialog(mContext, R.style. BottomSheetDialogStyle);
 ```
 
+### 方法三
+
+```
+final BottomSheetDialog dialog = new BottomSheetDialog(this);
+View view = getLayoutInflater().inflate(R.layout.layout_bottom_sheet_options, null);
+dialog.setContentView(view);
+try {
+   // hack bg color of the BottomSheetDialog
+   ViewGroup parent = (ViewGroup) view.getParent();
+   parent.setBackgroundResource(android.R.color.transparent);
+} catch (Exception e) {
+   e.printStackTrace();
+}
+dialog.show();
+```
+
 ## 基本使用
 
 ```
