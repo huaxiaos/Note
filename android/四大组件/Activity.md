@@ -1,3 +1,9 @@
+# 生命周期
+
+- 锁屏：onPause-onStop
+- Alert弹出：onPause
+- Home键：onPause-onStop
+
 # Activity切换
 
 - A - onCreate

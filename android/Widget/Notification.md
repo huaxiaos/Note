@@ -1,3 +1,13 @@
+# 点击后消失
+
+## 方法一
+
+Notification对象，设置一个flags，notification.flags |= Notification.FLAG_AUTO_CANCEL;(一定要加这个"|"，不然没效果)
+
+## 方法二
+
+builder.setAutoCancel(true);
+
 # 创建悬浮通知
 
 Android 5.0 以上，使用`setFullScreenIntent`
