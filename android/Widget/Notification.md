@@ -1,3 +1,15 @@
+# setFullScreenIntent自动执行PendingIntent的问题
+
+`mBuilder.setFullScreenIntent(pendingIntent, true);`
+
+上述代码，当通知来临时，会自动执行pendingIntent
+
+stackoverflow上的解决方案：
+
+`mBuilder.setFullScreenIntent(null, true);`
+
+但是这样会导致悬浮通知不显示
+
 # 点击后消失
 
 ## 方法一
