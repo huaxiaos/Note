@@ -1,3 +1,17 @@
+# 自定义AlertDialog去掉默认背景
+
+```
+mAlertDialog = new AlertDialog.Builder(this).create();
+mAlertDialog.setCancelable(false);
+mAlertDialog.show();
+
+Window window = mAlertDialog.getWindow();
+if (window == null) return;
+window.setContentView(R.layout.pause_alert);
+window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+window.setGravity(Gravity.CENTER);
+```
+
 # AlertDialog和Handler
 
 在子线程中使用AlertDialog，会报如下错误
