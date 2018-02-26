@@ -1,22 +1,7 @@
-# Bitmap设置Background变小的问题
+# MessageQueue
 
-代码片段
+完全自定义的Queue，没有继承自Queue（类似ActivityThread，并没有继承自Thread）
 
-```
-BitmapDrawable bd=new BitmapDrawable(bitmap);
-llLeft.setBackgroundDrawable(bd);
-```
+内部采用链表结构实现，这样保证了消息的时序性（可以参照sendMessageAtTime的实现）
 
-这样会导致实际看到的背景远小于Bitmap实际的大小
-
-原因是没有指定系统分辨率，需要setTargetDensity
-
-```
-BitmapDrawable bd=new BitmapDrawable(bitmap[0]);
-
-DisplayMetrics dm = new DisplayMetrics();
-getWindowManager().getDefaultDisplay().getMetrics(dm);
-bd.setTargetDensity(dm);
-
-llLeft.setBackgroundDrawable(bd);
-```
+消息队列的处理，是线程安全的，使用了对类的同步，synchronized (this)
