@@ -1,3 +1,15 @@
+# Activity启动流程
+
+Activity的完整启动流程非常复杂，但我们可以在Activity的入口处下断点，简要的看到Activity启动时的堆栈情况，如下图
+
+![Activity启动时的堆栈](http://7xuvhf.com1.z0.glb.clouddn.com/FphHAfwJ5dwmTGbG_P3P_aUqbsF7)
+
+简单来说，Activity启动的第一步是通过Zygote进行孵化，ZygoteInit执行一系列方法，创建出ActivityThread，之后启动ActivityThread中的Handler（H），依次通过handleLaunchActivity、performLaunchActivity通知Instrumentation，Instrumentation执行callActivityOnCreate方法通知Activity，Activity执行performCreate方法，通知具体的Activity，比如MainActivity，进而执行onCreate，时序图如下
+
+![Activity启动流程时序图](http://7xuvhf.com1.z0.glb.clouddn.com/Fqawh0dLR3Rv1zOlnYDa6MzvUWLl)
+
+Instrumentation其实是Android内部的一个测试框架，用来辅助Activity完成启动Activity的过程
+
 # Activity启动模式
 
 - standard 标准模式，每次都新建一个实例对象
@@ -29,20 +41,6 @@ Fragment生命周期和父Activity的生命周期是保持一致的，所以在�
 	- B - onStart
 	- B - onResume
 - A - onStop
-
-# 简要执行流程
-
-- Activity 
-	- startActivity
-	- startActivityForResult
-- Instrumentation
-	- execStartActivity
-- ApplicationThread
-	- scheduleLaunchActivity 
-- ActivityThread
-	- H
-	- handleLaunchActivity
-	- performLaunchActivity 
 
 # 参考链接
 
