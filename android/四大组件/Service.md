@@ -1,10 +1,29 @@
-# Activity切换
+# 生命周期
 
-- A - onCreate
-- A - onStart
-- A - onResume
-- A - onPause
-- B - onCreate
-- B - onStart
-- B - onResume
-- A - onStop
+- onCreate
+- onStartCommand
+- onDestroy
+
+首次启动，会执行onCreate→onStartCommand方法；重复启动，只会执行onStartCommand方法
+
+# 绑定
+
+Activity中创建ServiceConnection，Service中实现onBind来建立连接
+
+通过Binder实现数据传递
+
+# Service&Thread
+
+Service运行在主线程中，如果执行过多的耗时操作，可能会引起ANR
+
+Activity销毁时，Activity中生成的Thread会随之销毁，但Service不会销毁，可以通过重新建立绑定关系，进行继续的操作
+
+Service和Activity可以是一对多的关系
+
+# 远程Service
+
+AIDL进行进程间通信
+
+# 实际项目中的应用
+
+App版本更新
