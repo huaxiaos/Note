@@ -1,12 +1,21 @@
 # 生命周期
 
+## startService
+
 - onCreate
 - onStartCommand
 - onDestroy
 
 首次启动，会执行onCreate→onStartCommand方法；重复启动，只会执行onStartCommand方法
 
-# 绑定
+## bindService
+
+- onCreate
+- onBind
+- onUnbind
+- onDestroy
+
+# bind
 
 Activity中创建ServiceConnection，Service中实现onBind来建立连接
 
@@ -24,6 +33,8 @@ Service和Activity可以是一对多的关系
 
 AIDL进行进程间通信
 
+# IntentService
+
 # 实际项目中的应用
 
-App版本更新
+App版本更新、文件扫描
