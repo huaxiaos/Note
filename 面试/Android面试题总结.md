@@ -76,3 +76,34 @@ Glide的优点显而易见，简单易用，使用绝大多数的App场景
 - 最大的优势在于5.0以下(最低2.3)的bitmap加载。在5.0以下系统，Fresco将图片放到一个特别的内存区域(Ashmem区)
 - 大大减少OOM（在更底层的Native层对OOM进行处理，图片将不再占用App的内存）
 - 适用于需要高性能加载大量图片的场景
+
+Fresco缓存策略：
+
+Fresco使用三级缓存，已解码内存缓存；未解码内存缓存；磁盘缓存
+
+- 第一级缓存就是保存bitmap，直接存的就是bitmap对象，5.0 以下，这些位于ashmem，5.0以上，直接位于java的heap上
+- 第二级缓存保存在内存，但是没有解码，使用时需要解码，
+- 第三级缓存就是保存在本地文件，同样文件也未解码，使用的时候要先解码啦！
+
+在5.0以下，GC将会显著地引发界面卡顿。Fresco将图片放到一个特别的内存区域。当然，在图片不显示的时候，占用的内存会自动被释放。这会使得APP更加流畅，减少因图片内存占用而引发的OOM。
+
+# SSL握手是OkHttp实现的？还是底层实现的？
+
+> 蚂蚁金服
+
+对于https，在tcp三次握手后就会进行ssl的握手
+
+okhttp3.internal.io.RealConnection#connectSocket
+
+1. 首先tcp三次握手：Platform.get().connectSocket 
+2. 其次获得I/O流：source = Okio.buffer(Okio.source(rawSocket));sink = Okio.buffer(Okio.sink(rawSocket)); 
+3. 然后判断是否需要ssl，如果需要则进行ssl：connectTls(readTimeout, writeTimeout, connectionSpecSelector);
+
+connectTls中，ssl握手执行的代码是
+
+sslSocket.startHandshake();
+
+startHandshake的实现在org.conscrypt.OpenSSLSocketImpl#startHandshake中，调用的是native函数NativeCrypto.SSL_do_handshake()
+
+- https://juejin.im/entry/597f00ca6fb9a03c41455bf8
+- https://blog.csdn.net/hello2mao/article/details/53201974
