@@ -93,17 +93,27 @@ Fresco使用三级缓存，已解码内存缓存；未解码内存缓存；磁�
 
 对于https，在tcp三次握手后就会进行ssl的握手
 
-okhttp3.internal.io.RealConnection#connectSocket
+核心方法在RealConnection类中的connectSocket方法，判断是否需要ssl，如果需要则执行connectTls，ssl握手执行的代码是
 
-1. 首先tcp三次握手：Platform.get().connectSocket 
-2. 其次获得I/O流：source = Okio.buffer(Okio.source(rawSocket));sink = Okio.buffer(Okio.sink(rawSocket)); 
-3. 然后判断是否需要ssl，如果需要则进行ssl：connectTls(readTimeout, writeTimeout, connectionSpecSelector);
-
-connectTls中，ssl握手执行的代码是
-
+```
 sslSocket.startHandshake();
+```
 
 startHandshake的实现在org.conscrypt.OpenSSLSocketImpl#startHandshake中，调用的是native函数NativeCrypto.SSL_do_handshake()
+
+ssl握手完毕后，还会使用 HostnameVerifier 来验证 host 是否合法
+
+应用实例：
+
+如果服务端有自制https证书的需求，那么可以通过两个方法来实现
+
+1. 信任所有证书，跳过Verifier，不使用默认的SSLSocketFactory，自定义TrustManager，信任所有证书
+2. 信任自定义证书，以信任12306证书为例
+	1. 将自签名证书，比如 12306 的 srca.cer，保存到 assets
+	2. 读取自签名证书集合，保存到 KeyStore 中
+	3. 使用 KeyStore 构建 X509TrustManager
+	4. 使用 X509TrustManager 初始化 SSLContext
+	5. 使用 SSLContext 创建 SSLSocketFactory
 
 - https://juejin.im/entry/597f00ca6fb9a03c41455bf8
 - https://blog.csdn.net/hello2mao/article/details/53201974
