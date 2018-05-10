@@ -10,6 +10,43 @@ Activity的完整启动流程非常复杂，但我们可以在Activity的入口�
 
 Instrumentation其实是Android内部的一个测试框架，用来辅助Activity完成启动Activity的过程
 
+```
+participant Activity
+participant Instrumentation
+participant ActivityThread
+Activity ->> Activity: startActivity
+Activity ->> Instrumentation: startActivityForResult
+Instrumentation ->> ActivityThread: execStartActivity
+ActivityThread ->> ActivityThread: ApplicationThread.scheduleLaunchActivity
+ActivityThread ->> ActivityThread: H.handleMessage
+ActivityThread ->> ActivityThread: handleLaunchActivity
+ActivityThread ->> Instrumentation: performLaunchActivity
+Instrumentation ->> Activity: callActivityOnCreate
+Activity ->> Activity: performCreate
+```
+
+## Instrumentation.execStartActivity
+
+- ActivityManagerNative.getDefault()获取一个AMS的代理对象，然后调用它的startActivity方法来通知AMS去启动Activity。中间还有一系列的过程，最后是调用ActivityThread中的私有内部类ApplicationThread的scheduleLauncherActivity来进行Activity的启动
+- checkStartActivityResult，检查启动Activity的结果，例如，常见的异常：启动的Activity没有在AndroidManifest中注册
+
+## AcivityThread.ApplicationThread.scheduleLaunchActivity
+
+构造了一个ActivityClientRecord（里面包含各种对象，例如，token，intent等等），然后调用sendMessage发送一个消息。在引用程序对应的进程中。每一个Activity组件都是使用一个ActivityClientRecord对象来描述的，他们保存在ActivityThread类的成员变量mActivities中
+
+## ActivityThread.handleLaunchActivity
+
+在创建Activity之前，进行WindowManagerGlobal的初始化
+
+## ActivityThread. performLaunchActivity
+
+> 真正完成Activity的唤起，Activity被实例化，onCreate被调用。performLaunchActivity函数加载用户自定义的Activity的派生类，并执行其onCreate函数，它将返回此Activity对象
+
+- 从ActivityClientRecord中获取待启动Activity的组件信息
+- 通过Instrumentation的newActivity方法使用类加载器创建Activity
+- 通过LoadedApk的makeApplication尝试(try-catch)创建Application对象，Application对象不会重复创建，Application对象也是通过Instrumentation来创建的，和Activity类似
+-  创建ContextImpl对象并通过Activity的attach方法来完成一些重要数据的初始化，例如Window的创建，并建立和Window的关联
+
 # Activity启动模式
 
 - standard 标准模式，每次都新建一个实例对象
