@@ -1,3 +1,103 @@
+# onSaveInstanceState和onRestoreInstanceState触发的时机
+
+> 马蜂窝
+
+onSaveInstanceState，原则是当系统“未经你许可”时销毁了你的activity，则onSaveInstanceState会被系统调用
+
+- HOME键
+- 电源键关闭屏幕
+- 从Activity A 中启动一个新的 Activity 时
+- 屏幕方向切换
+
+ onRestoreInstanceState，需要注意的是，onSaveInstanceState方法和onRestoreInstanceState方法“不一定”是成对的被调用的，onRestoreInstanceState被调用的前提是，activity A“确实”被系统销毁了
+ 
+ onRestoreInstanceState在onCreate方法之后执行，但onCreate能获取到onRestoreInstanceState中的bundle参数，从而可以做数据还原
+
+# Fragment懒加载
+
+> 马蜂窝
+
+setUserVisibleHint
+
+这个方法会在Fragment的默认生命周期之前触发，Fragment不可见时为false，可见时为true（TabLayout框架下，会触发多次）
+
+可以在该方法中，Fragment可见时进行网络加载
+
+# OkHttp、HttpClient、HttpURLConnection、Volley
+
+> 马蜂窝
+
+- HttpClient 是 Apache 的一个三方网络框架，5.0被废弃
+- HttpURLConnection 是 Google 官方提供的网络库，底层也是用Socket来实现
+- OkHttp 是 Square 开源的网络库，底层实现同一ip和端口的请求重用一个socket，降低网络连接时间，对https有更好的支持，I/O性能也更好
+- Volley 是 Google 封装的网络框架，底层在android2.3以下系统使用httpclicent，在android2.3以上采用HttpUrlConnection，底层实现了ByteArrayPool缓存，适合频繁量小的网络操作
+
+# Activity中的Flags
+
+> 马蜂窝
+
+- NEW_TASK，效果和singleTask相同 
+- SINGLE_TOP，效果和singleTop相同
+- CLEAR_TOP
+	- 如果被启动Activity是SingleTask，那么栈上面的Activity出栈，执行该Activity的onNewIntent方法
+	- 如果被启动Activity是standard，那么该Activity连同其上面的Activity会全部出栈，重现创建实例
+- EXCLUDE_FROM_RECENTS，不会出现在历史Activity列表中  
+
+
+# View的getX和getRawX的区别
+
+> 马蜂窝
+
+- getX相对于当前View左上角的坐标
+- getRawX相对于屏幕左上角的坐标
+
+# Activity生命周期，A切换至B
+
+> 马蜂窝
+
+- A - onPause
+- `B - onCreate`
+- `B - onStart`
+- `B - onResume`
+- A - onStop
+
+# 为什么serializable只需要实现接口就可以进行序列化？
+
+> 马蜂窝
+
+Java中ObjectOutputStream用于序列化，ObjectInputStream用于反序列化
+
+从ObjectOutputStream的源码中可以得出答案，在序列化之前会进行类型判断，如果不是serializable、Enum、String等类型，就会抛异常
+
+> 1. 在变量声明前加上transient关键字，可以阻止该变量被序列化
+> 2. 在类中增加 writeObject 和 readObject 方法可以实现自定义序列化
+
+```
+// ObjectOutputStream#writeObject0
+
+if (obj instanceof Class) {
+    writeClass((Class) obj, unshared);
+} else if (obj instanceof ObjectStreamClass) {
+    writeClassDesc((ObjectStreamClass) obj, unshared);
+// END Android-changed
+} else if (obj instanceof String) {
+    writeString((String) obj, unshared);
+} else if (cl.isArray()) {
+    writeArray(obj, desc, unshared);
+} else if (obj instanceof Enum) {
+    writeEnum((Enum<?>) obj, desc, unshared);
+} else if (obj instanceof Serializable) {
+    writeOrdinaryObject(obj, desc, unshared);
+} else {
+    if (extendedDebugInfo) {
+        throw new NotSerializableException(
+            cl.getName() + "\n" + debugInfoStack.toString());
+    } else {
+        throw new NotSerializableException(cl.getName());
+    }
+}
+```
+
 # 为什么Volley不适合大量数据的POST和大文件下载，而OkHttp适合？
 
 > 裂变科技
