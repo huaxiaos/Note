@@ -44,12 +44,14 @@ setUserVisibleHint
 - EXCLUDE_FROM_RECENTS，不会出现在历史Activity列表中  
 
 
-# View的getX和getRawX的区别
+# View的getX和getRawX的区别？getX会返回负值么？
 
 > 马蜂窝
 
 - getX相对于当前View左上角的坐标
 - getRawX相对于屏幕左上角的坐标
+
+如果手指滑出当前view的范围，那么 getX 或 getY 会返回负值
 
 # Activity生命周期，A切换至B
 
