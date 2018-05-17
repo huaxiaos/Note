@@ -54,6 +54,8 @@
 	- 线程共享
 	- GC效率低
 
+[https://blog.csdn.net/u010425776/article/details/51170118](https://blog.csdn.net/u010425776/article/details/51170118)
+
 # GC
 
 ## GC算法

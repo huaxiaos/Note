@@ -6,7 +6,10 @@
 	-  invalidate
 		- 与requestLayout类似，区别在于，没有添加measure、layout的标志位，所以只会执行draw的流程
 	-  postInvalidate
-		- 与invalidate作用一样，但postInvalidate可以在非UI线程中执行  
+		- 与invalidate作用一样，但postInvalidate可以在非UI线程中执行
+
+- 加载阶段读入.class文件，class文件是二进制么？为什么需要使用二进制的方式？
+	- class文件是一种8位字节的二进制流文件， 各个数据项按顺序紧密的从前向后排列， 相邻的项之间没有间隙， 这样可以使得class文件非常紧凑， 体积轻巧， 可以被JVM快速的加载至内存， 并且占据较少的内存空间  
 
 # 2018.5.14
 
