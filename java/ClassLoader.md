@@ -95,6 +95,14 @@ Answer
 count1=1
 count2=0
 
+## 卸载
+
+1. 该类在堆中的所有实例都已被回收（堆中不存在该类的实例对象）
+2. 加载该类的classLoader已经被回收
+3. 该类对应的Class对象没有任何地方可以被引用，通过反射访问不到该Class对象
+
+JVM就在GC的时候，对类进行卸载
+
 [https://blog.csdn.net/ns_code/article/details/17881581](https://blog.csdn.net/ns_code/article/details/17881581)
 
 # 类加载器划分
