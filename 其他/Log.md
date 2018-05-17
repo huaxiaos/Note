@@ -1,3 +1,13 @@
+# 2018.5.17
+
+- invalidate、postInvalidate、requestLayout应用场景
+	- requestLayout
+		- 子View调用requestLayout方法，会标记当前View及父容器，同时逐层向上提交，直到ViewRootImpl处理该事件（责任链模式），ViewRootImpl依次调用scheduleTraversals、performTraversals，从而调用三大流程，对于每一个含有标记位的view及其子View都会进行measure、layout、draw
+	-  invalidate
+		- 与requestLayout类似，区别在于，没有添加measure、layout的标志位，所以只会执行draw的流程
+	-  postInvalidate
+		- 与invalidate作用一样，但postInvalidate可以在非UI线程中执行  
+
 # 2018.5.14
 
 - ViewStub实现原理
