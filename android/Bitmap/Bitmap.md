@@ -1,3 +1,10 @@
+# Bitmap高效加载
+
+主要是通过设置BitmapFactory.Options来实现
+
+1. inSampleSize，采样率，2的倍数，减少内存开支
+2. inJustDecodeBounds，不加载Bitmap的情况下，获取Bitmap的宽高属性
+
 # inJustDecodeBounds
 
 ```
