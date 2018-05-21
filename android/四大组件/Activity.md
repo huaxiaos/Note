@@ -6,7 +6,7 @@ Activity的完整启动流程非常复杂，但我们可以在Activity的入口�
 
 简单来说，Activity启动的第一步是通过Zygote进行孵化，ZygoteInit执行一系列方法，创建出ActivityThread，之后启动ActivityThread中的Handler（H），依次通过handleLaunchActivity、performLaunchActivity通知Instrumentation，Instrumentation执行callActivityOnCreate方法通知Activity，Activity执行performCreate方法，通知具体的Activity，比如MainActivity，进而执行onCreate，时序图如下
 
-![Activity启动流程时序图](http://7xuvhf.com1.z0.glb.clouddn.com/Fqawh0dLR3Rv1zOlnYDa6MzvUWLl)
+![Activity启动流程时序图](http://7xuvhf.com1.z0.glb.clouddn.com/FumGn30AolfpPq2rq-p-EOqVVsKv)
 
 Instrumentation其实是Android内部的一个测试框架，用来辅助Activity完成启动Activity的过程
 
