@@ -1,3 +1,72 @@
+# i++ 原子性？分为几步？
+
+> 陌陌
+
+不具有原子性
+
+i++，分为三步
+
+1. 读取i的值
+2. i+1
+3. 写入新值
+
+# Java 基本数据类型
+
+> 陌陌
+
+- byte：8位，1字节
+- short：16位，2字节
+- int：32位，4字节
+- long：64位，8字节
+- float：32位，4字节
+- double：64位，8字节
+- boolean
+- char：16位，2字节
+
+# Java构造方法&类初始化&显式调用&隐式调用
+
+> 陌陌
+
+```
+static class A {
+        static {
+            System.out.println("A1");
+        }
+        {
+            System.out.println("A2");
+        }
+
+        public A() {
+            System.out.println("A3");
+        }
+    }
+
+static class B extends A {
+    static {
+        System.out.println("B1");
+    }
+    {
+        System.out.println("B2");
+    }
+
+    public B() {
+        System.out.println("B3");
+    }
+}
+```
+
+new B(); 输出顺序
+
+Right Answer：A1 B1 A2 A3 B2 B3
+
+原则：（排名分先后）
+
+1. 依次调用父类的static块、子类的static块（类初始化）
+2. 依次调用父类的非static块、父类的构造器
+3. 依次调用子类的非static块、子类的构造器
+4. 第一步中的类初始化只会执行一次，多次new不会执行多次
+5. new B()，会隐式调用父类的无参构造器（super）
+
 # onSaveInstanceState和onRestoreInstanceState触发的时机
 
 > 马蜂窝
