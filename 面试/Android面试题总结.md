@@ -1,3 +1,57 @@
+# 子线程里面可以创建一个主线程相关的Handler么？
+
+> 陌陌
+
+可以
+
+首先，需要从Handler的构造函数入手
+
+```
+public Handler() {
+    this(null, false);
+}
+
+public Handler(Callback callback, boolean async) {
+	...
+    mLooper = Looper.myLooper();
+    if (mLooper == null) {
+        throw new RuntimeException(
+            "Can't create handler inside thread that has not called Looper.prepare()");
+    }
+    mQueue = mLooper.mQueue;
+    mCallback = callback;
+    mAsynchronous = async;
+}
+
+public Handler(Looper looper) {
+    this(looper, null, false);
+}
+
+public Handler(Looper looper, Callback callback, boolean async) {
+    mLooper = looper;
+    mQueue = looper.mQueue;
+    mCallback = callback;
+    mAsynchronous = async;
+}
+```
+
+可以看出Handler主要有两种构造函数
+
+- Handler() 内部调用 Handler(Callback callback, boolean async) 
+- Handler(Looper looper) 内部调用 Handler(Looper looper, Callback callback, boolean async)
+
+对于第一个构造方法，mLooper = Looper.myLooper()，此时Looper是当前线程的Looper（存储在sThreadLocal里面）
+
+对于第二个构造方法，从源码中可以看出，只要mLooper不是null即可，具体是子线程的Looper，还是主线程的Looper，没有要求，所以可以通过这个构造函数在子线程中创建主线程相关的Handler
+
+# 一句话形容内存泄漏？举个例子？
+
+> 陌陌
+
+该被释放的对象没有释放，一直被某个或某些实例所持有，却不再被使用，导致 GC 不能回收
+
+匿名内部类实现的Handler，会隐式引用外部的Activity，Activity在销毁的时候，会因为Handler的持有而造成 GC 回收失败
+
 # i++ 原子性？分为几步？
 
 > 陌陌
