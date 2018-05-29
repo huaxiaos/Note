@@ -4,6 +4,12 @@
 
 1. inSampleSize，采样率，2的倍数，减少内存开支
 2. inJustDecodeBounds，不加载Bitmap的情况下，获取Bitmap的宽高属性
+3. inBitmap
+	- 复用内存块，不需要重新给这个Bitmap申请一块新的内存
+	- 只能在3.0以后使用
+	- 3.0~4.4，只能重用相同大小的Bitmap内存区域
+	- 4.4以后， 只要旧的Bitmap的尺寸大于等于新的Bitmap的尺寸即可
+
 
 # inJustDecodeBounds
 

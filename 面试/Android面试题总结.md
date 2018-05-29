@@ -1,3 +1,10 @@
+# getChildFragmentManager & FragmentManager
+
+> 美拍
+
+- 需要管理相互独立的，并且隶属于Activity的Fragment使用FragmentManager
+- 在Fragment中动态的添加Fragment要使用getChildFragmetManager来管理
+
 # 子线程里面可以创建一个主线程相关的Handler么？
 
 > 陌陌
