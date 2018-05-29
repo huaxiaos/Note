@@ -175,3 +175,4 @@ Native层的内存分配失败了，这类GC就会被触发。如果GPU的纹理
 
 - [http://www.cnblogs.com/smyhvae/p/4744233.html](http://www.cnblogs.com/smyhvae/p/4744233.html)
 - [https://crowhawk.github.io/2017/08/15/jvm_3/](https://crowhawk.github.io/2017/08/15/jvm_3/)
+- [https://mp.weixin.qq.com/s/Ts9esqNB6bf4SyseiXPsQw](https://mp.weixin.qq.com/s/Ts9esqNB6bf4SyseiXPsQw)

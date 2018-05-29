@@ -1,3 +1,11 @@
+# 2018.5.28
+
+调用系统默认相机，如果不设置MediaStore.EXTRA_OUTPUT参数，则不会输出高质量图片
+
+临时文件如何处理？
+
+[https://blog.csdn.net/u010296640/article/details/72731324](https://blog.csdn.net/u010296640/article/details/72731324)
+
 # 2018.5.17
 
 - invalidate、postInvalidate、requestLayout应用场景
