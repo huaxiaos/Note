@@ -1,3 +1,27 @@
+# Java自动装箱&拆箱
+
+> 陌陌
+
+何时发生？
+
+- 赋值
+	- Integer iObject = 3 （装箱）
+	- int iPrimitive = iObject （拆箱）
+- 方法调用
+
+	```
+	public static Integer show(Integer iParam){
+	   System.out.println("autoboxing example - method invocation i: " + iParam);
+	   return iParam;
+	}
+	
+	//autoboxing and unboxing in method invocation
+	show(3); //autoboxing
+	int result = show(3); //unboxing because return type of method is Integer
+	``` 
+
+[https://droidyue.com/blog/2015/04/07/autoboxing-and-autounboxing-in-java/](https://droidyue.com/blog/2015/04/07/autoboxing-and-autounboxing-in-java/)
+
 # getChildFragmentManager & FragmentManager
 
 > 美拍
@@ -318,6 +342,10 @@ Fresco使用三级缓存，已解码内存缓存；未解码内存缓存；磁�
 - 第三级缓存就是保存在本地文件，同样文件也未解码，使用的时候要先解码啦！
 
 在5.0以下，GC将会显著地引发界面卡顿。Fresco将图片放到一个特别的内存区域。当然，在图片不显示的时候，占用的内存会自动被释放。这会使得APP更加流畅，减少因图片内存占用而引发的OOM。
+
+> Ashmem
+> 
+> Ashmem 是一种共享内存的机制，不同进程可以将同一段物理内存映射到各自的虚拟地址控制，从而实现共享。通过注册Cache Shrinker回收内存（不会触发GC）
 
 # SSL握手是OkHttp实现的？还是底层实现的？
 
