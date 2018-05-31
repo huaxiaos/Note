@@ -10,6 +10,8 @@
 	- 3.0~4.4，只能重用相同大小的Bitmap内存区域
 	- 4.4以后， 只要旧的Bitmap的尺寸大于等于新的Bitmap的尺寸即可
 
+对于inBitmap，只能当旧对象被回收后，新对象才能复用
+对于Bitmap对象，3.0以下及8.0以上占用native的内存，其他版本占用java内存
 
 # inJustDecodeBounds
 

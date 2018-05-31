@@ -1,7 +1,9 @@
 # equals & == 的区别
 
 - == 比较的是两个对象的内存地址是否相等
-- 如果不重写equals方法，那么和==是一样的，因为equals的源码默认返回的就是==的比较结果
+- 对于equals，不同的类会有不同的表现
+	- String类中的equals比较的是字符串的内容
+	- Object类中的equals默认是用==来实现的，所以需要重写equals来实现正确的比较 
 
 # equals & hashCode
 

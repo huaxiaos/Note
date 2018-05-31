@@ -10,4 +10,5 @@ LinkedHashMap，内部有排序功能，数据在被get的时候就会排序，�
 例如 A B C D 四个数据，执行get B
 
 - 先remove B
-- 然后将B 放在最后，变成 A C D B
+- 然后将B 放在表头，变成 B A C D
+- 删除的时候，删除最后一个item
