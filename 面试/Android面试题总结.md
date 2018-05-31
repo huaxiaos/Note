@@ -1,3 +1,34 @@
+# onLayout
+
+> 美团
+
+onLayout的作用是用来确定子View的位置
+
+自定义的ViewGroup必须要重写onLayout方法，通过getMeasuredWidth方法获取子View的宽度，然后根据需求，执行子View的layout方法，来实现定位
+
+https://blog.csdn.net/dmk877/article/details/49632959
+
+# ARGB_8888几位？几个字节？RGB相关
+
+> 美团
+
+- Bitmap.Config ARGB_4444：每个像素占四位，即A=4，R=4，G=4，B=4，那么一个像素点占4+4+4+4=16位 
+- Bitmap.Config ARGB_8888：每个像素占四位，即A=8，R=8，G=8，B=8，那么一个像素点占8+8+8+8=32位
+- Bitmap.Config RGB_565：每个像素占四位，即R=5，G=6，B=5，没有透明度，那么一个像素点占5+6+5=16位
+- Bitmap.Config ALPHA_8：每个像素占四位，只有透明度，没有颜色。
+
+一般情况下我们都是使用的ARGB_8888，由此可知它是最占内存的，因为一个像素占32位，8位=1字节，所以一个像素占4字节的内存。假设有一张480x800的图片，如果格式为ARGB_8888，那么将会占用1500KB的内存
+
+# 如果有一个一直在执行的Thread，那么这个Thread和Service有什么区别？（不考虑ANR，不考虑内存泄漏）
+
+> 美团
+
+如果这个时候当你 start 一个 新的 Activity， 就没有办法在该 Activity 里面控制之前创建的 Thread
+
+Thread没有bind这个功能
+
+而Service是可以被控制的
+
 # Java自动装箱&拆箱
 
 > 陌陌

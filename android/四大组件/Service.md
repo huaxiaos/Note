@@ -23,7 +23,7 @@ Activity中创建ServiceConnection，Service中实现onBind来建立连接
 
 # Service&Thread
 
-Service运行在主线程中，如果执行过多的耗时操作，可能会引起ANR
+Service运行在主线程中（线程id和主线程id一致），如果执行过多的耗时操作，可能会引起ANR
 
 Activity销毁时，Activity中生成的Thread会随之销毁，但Service不会销毁，可以通过重新建立绑定关系，进行继续的操作
 
