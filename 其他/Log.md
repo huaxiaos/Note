@@ -1,3 +1,51 @@
+# 2018.6.2
+
+NestedScroll
+
+[android NestedScroll嵌套滑动机制完全解析](https://blog.csdn.net/lmj121212/article/details/52974427)
+
+过度绘制
+
+屏幕上的某个像素在同一帧的时间内被绘制了多次
+
+- 移除默认的 Window 背景
+- 移除不必要的背景，如子View和父View背景一致
+- 写合理且高效的布局
+	- 减少View层级
+	- ViewStub
+	- Merge标签  
+
+稳定性
+
+- 指标
+	- 业务稳定性
+		- 具体业务逻辑的稳定性，题库，剪辑操作等等 
+	- 基础能力稳定性
+		- Push到达率，如对接厂商push等
+	- 性能稳定性
+		- crash
+		- 内存OOM
+		- 卡顿、FPS
+		- 启动时间
+- 工具
+	- Bugly、友盟、听云
+	- Monkey
+	- 自定义的测试脚本
+	- TestIn兼容性
+	- 阿里百川反馈
+- 日志
+	- 本地Log
+	- Log收集页面
+	- 核心逻辑处异常打点
+		- 第三方埋点
+		- 上传至服务端收集分析，如模考时间、自动交卷等异常问题
+- 发布
+	- A/B Test
+	- 灰度发布、逐步放量发布
+	- 热修复       
+
+[2000万日订单背后：美团外卖客户端高可用建设体系](https://mp.weixin.qq.com/s/VCR4hdmE0ZsxjZsM_6g19w)
+
 # 2018.5.31
 
 性能优化
