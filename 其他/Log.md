@@ -1,3 +1,19 @@
+# 2018.6.4
+
+热修复
+
+- native解决方案
+	- AndFix
+- Dex插桩方案
+	- Tinker
+- Instant Run热插拔原理
+	- 美团Robust
+
+资源热修复
+
+- 构造一个新的AssetManager，反射调用addAssetPath
+- 构造一个package id为 0 x 66 的资源包，不会和目前的资源包冲突，直接加入到AssetManager中就可以用
+
 # 2018.6.2
 
 解决的难题
