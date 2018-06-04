@@ -1,3 +1,37 @@
+# RecyclerView & ListView 区别
+
+> 美团
+
+- 布局效果
+	- RecyclerView，支持横向、纵向、Grid布局
+	- ListView，纵向
+- API使用
+	- RecyclerView，复用 Item 的工作 Google 全帮你搞定，不再需要像 ListView 那样自己调用 setTag
+	- ListView 自己实现
+-  布局方法
+	- ListView支持setEmptyView、HeadView、FootView、onItemClick
+	- RecyclerView不支持，需要自定义实现
+- 局部刷新
+	- RecycleView支持
+	- ListView不支持
+- 动画效果
+	- RecyclerView支持性更好
+	- ListView需要完全自定义实现
+- 嵌套滑动
+	- RecyclerView支持，实现了NestedScrolling接口
+	- ListView不支持
+- 缓存
+	- RecyclerView（四级缓存）
+		- 屏幕内缓存
+		- 屏幕外缓存，默认大小为2
+		- 用户自定义的缓存
+		- 缓存池（多个RecyclerView可以共用，例如ViewPager+多个list的场景） 
+	- ListView（两级缓存）
+		- 屏幕内
+		- 屏幕外
+
+[关于Recyclerview的缓存机制的理解](https://zhooker.github.io/2017/08/14/%E5%85%B3%E4%BA%8ERecyclerview%E7%9A%84%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E7%9A%84%E7%90%86%E8%A7%A3/) 
+
 # onLayout
 
 > 美团
