@@ -1,3 +1,79 @@
+# OkHttp是如何进行连接复用的？
+
+> 腾讯视频
+
+连接复用主要是针对Connection的复用，Connection是一个接口类，具体的实现类是RealConnection，Connection的作用是对Socket进行封装，是请求发送和响应的通道
+
+```
+public interface Connection {
+    Route route();
+
+    Socket socket();
+
+    @Nullable
+    Handshake handshake();
+
+    Protocol protocol();
+}
+```
+
+RealConnection中有一个重要的成员变量：List<Reference<StreamAllocation>> allocations
+
+StreamAllocation是OkHttp用来联系连接和stream的桥梁，RealConnection缓存了StreamAllocation的列表，用来判定连接是否空闲，如果List大小为0，则表示连接空闲，可以关闭回收，否则，说明连接还在使用（使用引用计数发来进行标记）
+
+改变这个List大小的方法有两个
+
+- aquire，用于“增”，将StreamAllocation用弱引用包装，然后加入List
+- release，用于“减”
+
+上面是对Connection的介绍，OkHttp使用ConnectionPool来管理连接，ConnectionPool中使用双向队列Deque<RealConnection>来缓存上面提到的Connection，该队列有基本的put&get&remove操作
+
+主要是get操作，这是复用的关键操作，遍历上述Deque，判断是否符合复用条件，如果满足，则直接复用，复用条件有以下几条
+
+- Connection的连接计数次数小于限制的次数
+- request的地址和Connection的地址匹配
+
+复用的具体实现是通过aquire增加一个stream
+
+```
+@Nullable
+RealConnection get(Address address, StreamAllocation streamAllocation, Route route) {
+	assert Thread.holdsLock(this);
+	Iterator var4 = this.connections.iterator();
+	RealConnection connection;
+	do {
+	    if(!var4.hasNext()) {
+	        return null;
+	    }
+	    connection = (RealConnection)var4.next();
+	} while(!connection.isEligible(address, route));
+	// 增加一个stream		
+	streamAllocation.acquire(connection, true);
+	return connection;
+}
+```
+
+那缓存的Connection是如何进行回收的呢？可以从上面Deque的put方法中入手分析，在put之前，会执行cleanupRunnable进行Connection的回收（通过ConnectionPool中的内部线程池来执行这个Runnable）
+
+cleanupRunnable的工作内容是：不断的调用cleanup来进行清理，并返回下次需要清理的间隔时间，然后调用wait进行等待以释放锁与时间片，当等待时间到了后，再次进行清理，并返回下次要清理的间隔时间，如此循环下去
+
+cleanup的工作内容是：根据连接中的引用计数来计算空闲连接数和活跃连接数，然后标记出空闲的连接，如果空闲连接keepAlive时间超过5分钟，或者空闲连接数超过5个，则从Deque中移除此连接，并根据一定规则制定下一次的清理时间（keepAlive的时间默认是5分钟，空闲链接默认是5，可以修改）
+
+# ANR的了解
+
+> 微博
+
+ANR类型
+
+1. KeyDispatchTimeout(5 seconds) --主要类型按键或触摸事件在特定时间内无响应
+2. BroadcastTimeout(10 seconds) --BroadcastReceiver在特定时间内无法处理完成
+3. ServiceTimeout(20 seconds) --小概率类型 Service在特定的时间内无法处理完成
+
+trace文件中，具体参考的几个值
+
+- THREAD信息，状态&ID等等
+- 虚拟机类型
+
 # RecyclerView & ListView 区别
 
 > 美团
