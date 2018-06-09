@@ -1,3 +1,47 @@
+# Glide是如何进行生命周期的绑定的？
+
+> 腾讯视频
+
+Glide的with方法，可以传入不同的参数，Context、Activity、Fragment等等
+
+简而言之，Glide通过构造了一个自定义的Fragment来实现生命周期的绑定。（Fragment和Activity有近乎一直的生命周期）
+
+从Glide.with(Activity activity)入手
+
+```
+@NonNull
+public RequestManager get(@NonNull Activity activity) {
+	if (Util.isOnBackgroundThread()) {
+		return get(activity.getApplicationContext());
+	} else {
+		assertNotDestroyed(activity);
+		// 获取FragmentManager
+		android.app.FragmentManager fm = activity.getFragmentManager();
+		return fragmentGet(activity, fm, null /*parentHint*/);
+	}
+}
+
+@NonNull
+private RequestManager fragmentGet(@NonNull Context context,
+  @NonNull android.app.FragmentManager fm,
+  @Nullable android.app.Fragment parentHint) {
+	// 生成自定义的Fragment
+	RequestManagerFragment current = getRequestManagerFragment(fm, parentHint);
+	RequestManager requestManager = current.getRequestManager();
+	if (requestManager == null) {
+	  Glide glide = Glide.get(context);
+	  // 设置Lifecycle监听
+	  requestManager =
+	      factory.build(
+	          glide, current.getGlideLifecycle(), current.getRequestManagerTreeNode(), context);
+	  current.setRequestManager(requestManager);
+	}
+	return requestManager;
+}
+```
+
+从源码中可以看出，首先是获取Activity的FragmentManager（Fragment的ChildFragmentManager），通过这个FragmentManager生成一个自定义的Fragment，并注入ActivityFragmentLifecycle这个监听，从而实现对生命周期的绑定
+
 # OkHttp是如何进行连接复用的？
 
 > 腾讯视频
@@ -17,7 +61,7 @@ public interface Connection {
 }
 ```
 
-RealConnection中有一个重要的成员变量：List<Reference<StreamAllocation>> allocations
+RealConnection中有一个重要的成员变量：`List<Reference<StreamAllocation>> allocations`
 
 StreamAllocation是OkHttp用来联系连接和stream的桥梁，RealConnection缓存了StreamAllocation的列表，用来判定连接是否空闲，如果List大小为0，则表示连接空闲，可以关闭回收，否则，说明连接还在使用（使用引用计数发来进行标记）
 
