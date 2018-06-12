@@ -1,3 +1,45 @@
+# OkHttp和Volley的对比？
+
+> 滴滴
+
+首先OkHttp和Volley虽然都可以用于网络请求，但其实不是一类，OkHttp和HttpClient、HttpUrlConnection和职责相同，是基于Http协议的封装，偏向于真正的请求，而Volley是对HTTPClient（2.3以下）和HttpUrlConnection（2.3以上）的封装
+
+> HttpURLConnection在Android 4.4 之后，底层实现用的也是OkHttp
+
+Volley
+
+- 优点
+	- 非常适合数据量小，但通信频繁的网络场景，因为底层实现了ByteArrayPool用作请求时的缓存
+	- 服务端的回调在主线程 
+- 缺点
+	- 对于大文件的下载或者大数据量的post支持性不好
+	- 对https的支持性不好
+	- 不再维护
+
+OkHttp
+
+- 优点
+	- 支持大文件下载和大数据量的post
+	- 支持https
+	- IO操作性能更好，okio
+	- 共享同一个Socket来处理同一个服务器的所有请求
+	- 连接池复用
+- 缺点 
+	- 服务端回调是在子线程
+	- 封装相对麻烦，一般需要自己额外封装一层或者配合Retrofit使用 
+
+# handler.postDelay的实现原理？
+
+> 滴滴
+
+简而言之，如果没有到时的任务，则会调用nativePollOnce进行阻塞，每加入一个message，会使用nativeWake重新唤醒队列
+
+1. postDelay()一个10秒钟的Runnable A、消息进队，MessageQueue调用nativePollOnce()阻塞，Looper阻塞；
+2. 紧接着post()一个Runnable B、消息进队，判断现在A时间还没到、正在阻塞，把B插入消息队列的头部（A的前面），然后调用nativeWake()方法唤醒线程；
+3. MessageQueue.next()方法被唤醒后，重新开始读取消息链表，第一个消息B无延时，直接返回给Looper；
+4. Looper处理完这个消息再次调用next()方法，MessageQueue继续读取消息链表，第二个消息A还没到时间，计算一下剩余时间（假如还剩9秒）继续调用nativePollOnce()阻塞；
+5. 直到阻塞时间到或者下一次有Message进队； 
+
 # Glide是如何进行生命周期的绑定的？
 
 > 腾讯视频
@@ -75,7 +117,7 @@ StreamAllocation是OkHttp用来联系连接和stream的桥梁，RealConnection�
 主要是get操作，这是复用的关键操作，遍历上述Deque，判断是否符合复用条件，如果满足，则直接复用，复用条件有以下几条
 
 - Connection的连接计数次数小于限制的次数
-- request的地址和Connection的地址匹配
+- request的host或者url地址相同等等
 
 复用的具体实现是通过aquire增加一个stream
 
