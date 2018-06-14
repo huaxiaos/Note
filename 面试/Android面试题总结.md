@@ -1,3 +1,22 @@
+# Activity启动流程
+
+> 快手
+
+详细流程参见Github中的Activity.md
+
+简要流程（Activity---Instrumentation---ActivityThread---AMS---ApplicationThread---H---Activity）
+
+1. Activity，startActivityForResult
+2. Instrumentation，execStartActivity
+	- ActivityManagerNative.getDefault()获取AMS代理，启动Activity，最后通过ApplicationThread返回
+	- checkStartActivityResult，检查启动结果，如是否在AndroidManifest中注册
+3. ApplicationThread，scheduleLaunchActivity
+4. H，handleLaunchActivity
+5. H，performLaunchActivity
+	- 创建Activity（Instrumentation）
+	- 创建Application（LoadedApk、Instrumentation）
+	- 创建Window，建立关联
+
 # OkHttp和Volley的对比？
 
 > 滴滴
