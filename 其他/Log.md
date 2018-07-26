@@ -1,3 +1,30 @@
+# 2018.7.26
+
+`对于集合或者对象的基本操作也应该封装一个util类`
+
+- 集合是否合法
+	- null
+	- 空
+	- out of index 
+- 返回集合长度的方法
+- 其他常用的操作，避免重复判断代码的书写
+
+`MVP框架中对model的理解`
+
+之前的理解是，model层包括对数据的获取（例如从网络获取数据）以及对数据的基本处理（例如JSON to XXXBean），另外，业务逻辑中对数据的改造由presenter来实现
+
+有几点不太好的地方
+
+1. model层不应直接负责数据的获取，数据的获取需要自己封装成一个功能模块对model层提供接口
+2. presenter层不应该做model数据的改造，所有的改造都应该由model层自己处理，并对外开放接口
+
+所以，model层应该包括对数据的全部处理，包括基础的类型转换，也应该包括根据业务需要进行的改造；类似数据获取的逻辑，应该单独出一个功能模块
+
+`编译问题`：gradle编译报错，error如下
+`com.android.build.gradle.tasks.factory.AndroidJavaCompile.setDependencyCacheDir(Ljava/io/File;)V`
+原因：Android gradle plugin版本太旧
+解决方案：update `com.android.tools.build:gradle:2.2.3` from 2.2.3 to 2.3.3
+
 # 2018.6.9
 
 深度优先 & 广度优先
