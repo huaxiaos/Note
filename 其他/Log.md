@@ -1,3 +1,68 @@
+# 2018.8.2
+
+`编译问题`
+
+如果遇到一直出现报红的引用，可以close project，然后重新open（不要从cache的列表中选）
+
+`命令行`
+
+adb pull /sdcard/test.trace  /Users/sunhuaxiao/Desktop/
+
+# 2018.7.31
+
+`Glide`
+
+glide重置图片大小，直接用into(w,h)或者override不生效，需要额外添加fitCenter属性
+
+可以参考这个[issue](https://github.com/bumptech/glide/issues/1051)，大意是说，如果不指定fitCenter属性，Glide将不会直接进行resize
+
+# 2018.7.30
+
+`windowSoftInputMode 应用场景`
+
+值得一提的是，同样的设置，某些场景下，manifest设置不生效，需要代码动态设置
+
+```
+getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+```
+
+- adjustUnspecified：当软键盘弹出时，系统自动指定窗口的调整模式，根据不同的情况会选择adjustResize或者adjustPan的一种
+- adjustPan ： 当软键盘弹出时，会将主窗口的平移（translateY），来适应软键盘的显示，键盘会在EditText的下方
+- adjustResize ： 当软键盘弹出时，会让布局重新绘制，这种一般适应于带有滑动性质的控制，让其向下滚动，然后适应软键盘的显示
+- adjustNothing： 软键盘弹出时，主窗口不会做出任何反应
+
+# 2018.7.27
+
+`编译问题`
+
+Could not find matching constructor for: org.gradle.util.Clock()
+
+gradle版本号过高导致，降低至4.1及以下可以fix
+
+`OnLowMemory & OnTrimMemory `
+
+https://www.jianshu.com/p/a5712bdb2dfd
+
+- OnLowMemory被回调时，已经没有后台进程；而onTrimMemory被回调时，还有后台进程。
+- OnLowMemory是在最后一个后台进程被杀时调用，一般情况是low memory killer 杀进程后触发；而OnTrimMemory的触发更频繁，每次计算进程优先级时，只要满足条件，都会触发。
+- 通过一键清理后，OnLowMemory不会被触发，而OnTrimMemory会被触发一次
+
+`单例之静态内部类`
+
+```
+public class Singleton {  
+    private static class SingletonHolder {  
+        private static final Singleton INSTANCE = new Singleton();  
+    }  
+    
+    private Singleton (){}  
+    
+    public static final Singleton getInstance() {  
+        return SingletonHolder.INSTANCE; 
+    }  
+}
+```
+
 # 2018.7.26
 
 `对于集合或者对象的基本操作也应该封装一个util类`
@@ -18,7 +83,7 @@
 1. model层不应直接负责数据的获取，数据的获取需要自己封装成一个功能模块对model层提供接口
 2. presenter层不应该做model数据的改造，所有的改造都应该由model层自己处理，并对外开放接口
 
-所以，model层应该包括对数据的全部处理，包括基础的类型转换，也应该包括根据业务需要进行的改造；类似数据获取的逻辑，应该单独出一个功能模块
+所以，model层应该包括对数据的全部处理，包括基础的类型转换，包括数据有效性的校验，也应该包括根据业务需要进行的改造；类似数据获取的逻辑，应该单独出一个功能模块
 
 `编译问题`：gradle编译报错，error如下
 `com.android.build.gradle.tasks.factory.AndroidJavaCompile.setDependencyCacheDir(Ljava/io/File;)V`
