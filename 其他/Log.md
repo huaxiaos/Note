@@ -1,3 +1,58 @@
+# 2018.8.8
+
+北京奥运10周年纪念日~
+
+`TCP&UDP`
+
+TCP三次握手
+
+- Client–发送带有SYN标志的数据包–Server
+- Server–发送带有SYN/ACK标志的数据包–Client
+	- 为什么还需要ACK？因为双方通信无误必须是两者互相发送信息都无误，传了SYN，证明发送方到接收方的通道没有问题；传ACK，可以保证接收方到发送方的通道没有问题 	
+- Client–发送带有带有ACK标志的数据包–Server
+
+UDP
+
+- 不需要先建立连接
+- 不需要给出任何确认
+- 一般用于即时通信
+
+`JVM栈`
+
+- 栈中保存的是基本数据类型和堆中对象的引用
+- 基本数据类型长度固定，不会动态增长
+- 传值使用的是“传引用值”的方式，而不是直接传递原始对象
+- 对象放在堆中，用来实现对象的动态增长
+
+`Java引用类型`
+
+虚引用（Phantom Reference）十分脆弱，它的唯一作用就是当其指向的对象被回收之后，自己被加入到引用队列，用作记录该引用指向的对象已被销毁
+
+引用队列(Reference Queue)
+
+- 一般情况下，一个对象标记为垃圾（并不代表回收了）后，会加入到引用队列
+- 对于虚引用来说，它指向的对象会只有被回收后才会加入引用队列，所以可以用作记录该引用指向的对象是否回收
+
+# 2018.8.7
+
+`git`
+
+.gitkeep 可以用来跟踪空文件夹
+
+# 2018.8.6
+
+`traceview`
+
+```
+Debug.startMethodTracing();
+...
+Debug.stopMethodTracing();
+```
+
+真实路径：/sdcard/Android/data/包名/files/dmtrace.trace
+
+并不是传说中的/sdcard/dmtrace.trace，具体细节可以查看源码
+
 # 2018.8.2
 
 `编译问题`
@@ -104,12 +159,19 @@ mWebView.reload();
 
 热修复
 
-- native解决方案
+- 底层替换方案（native）
+	- 直接在Native层修改原有类，不会再次加载新类，不会重启
+	- 不能够增减原有类的方法和字段 
 	- AndFix
 - Dex插桩方案
+	- 插入到dexElements数组的最前面，利用类加载机制实现
+	- 需要重启
 	- Tinker
 - Instant Run热插拔原理
+	- 参考Instant Run原理，修改$change
 	- 美团Robust
+
+[参考链接](https://blog.csdn.net/itachi85/article/details/79522200)	
 
 资源热修复
 
