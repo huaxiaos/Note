@@ -1,3 +1,26 @@
+# 2018.8.24
+
+判断app前后台的方法
+
+- 使用ActivityLifecycleCallbacks
+- RunningTask&RunningProcess高版本的系统已经弃用
+- [https://github.com/wenmingvs/AndroidProcess](https://github.com/wenmingvs/AndroidProcess)
+
+# 2018.8.10
+
+`动态代理`
+
+- 区别于静态代理，动态代理不需要创建多个代理类，只用一个代理类即可，而且代理Object可以动态创建
+- 使用方法
+	- 代理类需要实现InvocationHandler这个接口
+	- 通过Proxy.newProxyInstance创建代理类的对象
+- 应用
+	- hook
+		- 动态代理是hook的一种方式，例如可以hook像Clipboard这种系统服务
+			- Service缓存在一个map中
+			- 跨进程通讯的IBinder对象，也缓存在一个map中
+			- 可以通过动态代理修改map中的对象
+
 # 2018.8.8
 
 北京奥运10周年纪念日~
