@@ -4,7 +4,7 @@
 
 ## 推荐
 
-- [Android面试题总结](/面试/Android面试题总结.md)
-- [Log](/其他/Log.md)
+- [Android面试题总结](/interview/Android面试题总结.md)
+- [Log](/Log.md)
 
 
